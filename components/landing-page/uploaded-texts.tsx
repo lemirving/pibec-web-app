@@ -2,7 +2,6 @@ import {  ArrowRight, Clock3 } from "lucide-react";
 import SectionHeader from "../common/section-header";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import { describe } from "node:test";
 import TextCard from "../texts/text-card";
 
 const recentlyUploaded = [
@@ -105,6 +104,7 @@ export default function UploadedTexts(){
             </div>
 
         </section>
+        
 
     );
 }

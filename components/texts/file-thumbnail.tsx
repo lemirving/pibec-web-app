@@ -13,7 +13,7 @@ export function FileThumbnail({ extension }: { extension?: string | null }) {
   }
 
   return (
-    <div className={`w-full h-40 rounded-md border ${config.bg} ${config.border} flex flex-col items-center justify-center gap-2`}>
+    <div className={`w-full h-full rounded-md border ${config.bg} ${config.border} flex flex-col items-center justify-center gap-2`}>
       {/* ícone de documento */}
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         strokeWidth="1.5" className={config.text}>

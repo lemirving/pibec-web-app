@@ -10,6 +10,19 @@ interface Author {
 }
 type TextStatus = "pending" | "revised" | "published"
 type TextGenre  = "conto" | "poema" | "artigo" | "redacao" | "outro"
+const statusLabel: Record<TextStatus, string> = {
+  pending:   "Pendente",
+  revised:   "Revisado",
+  published: "Publicado"
+}
+
+const genreLabel: Record<TextGenre, string> = {
+  redacao: "Redação",
+  conto:   "Conto",
+  poema:   "Poema",
+  artigo:  "Artigo",
+  outro:   "Outro"
+}
 interface Text {
   id:        number       // string (UUID) quando vier do banco
   author:    Author
@@ -31,13 +44,16 @@ export default function TextCard({ text }: { text: Text }) {
           </CardTitle>
           <CardDescription>Postado em: {text.createdAt}</CardDescription>
           <div className="flex flex-wrap gap-2 mt-1">
-            <Badge>{text.theme}</Badge>
-            <Badge>{text.genre}</Badge>
-            <Badge>{text.status}</Badge>
+            <Badge variant="outline">{text.theme}</Badge>
+            {/* CORREÇÃO 1: Usar statusLabel com text.status */}
+            <Badge variant="outline">{statusLabel[text.status]}</Badge>
+            
+            {/* CORREÇÃO 2: Usar genreLabel com text.genre */}
+            <Badge variant="outline">{genreLabel[text.genre]}</Badge>
           </div>
         </CardHeader>
 
-        <CardContent className="flex-1 px-6 py-1">
+        <CardContent className="flex flex-col items-center justify-center flex-1 px-6 py-8 min-h-[140px]">
           <FileThumbnail extension={text.fileExtension} />
         </CardContent>
 
