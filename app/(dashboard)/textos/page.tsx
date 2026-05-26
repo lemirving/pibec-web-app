@@ -1,5 +1,6 @@
 "use client"
 
+import { PaginationControls } from "@/components/common/pagination";
 import SectionHeader from "@/components/common/section-header";
 import { GlobalSearchBar } from "@/components/custom/global-search-bar";
 import { ProductionCard } from "@/components/custom/production-card";
@@ -81,20 +82,26 @@ const TestInput = [
     createdAt: "20/05/2026",
     fileExtension: "txt"
   }
+  
 ] 
 
 export default function TextsPage(){
     const [search, setSearch] = useState("");
-    
+    const [page, setPage] = useState(1);
+    const perPage = 4;
     const filtered = search
       ? TestInput.filter(i => i.title.toLowerCase().includes(search.toLowerCase()))
       : TestInput
 
+    
+    const totalPages = Math.ceil(filtered.length / perPage)
+    const paginated = filtered.slice((page - 1) * perPage, page * perPage)
 
     
     const handleSearchSubmit = (value: string) => {
         console.log("Busca global submetida:", value);
         setSearch(value);
+        setPage(1);    
     };
 
     return (
@@ -112,7 +119,8 @@ export default function TextsPage(){
                         </p>   
                     </div>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full ">
-                    <div className="w-full h-full max-w-2xl">
+                    <div className="w-full h-full max-w-2xl mb-16 items-center justify-center">
+                        <h2 className="text-lg mb-2 font-bold"> Busque um texto qualquer.</h2>
                      <GlobalSearchBar 
                             searchList={TestInput}
                             onSearch={handleSearchSubmit} 
@@ -130,8 +138,8 @@ export default function TextsPage(){
 
             <Separator />
 
-            <section className="py-20 bg-muted/20 ">
-            <div className="wrapper rounded-lg">
+            <section className="py-20 bg-muted/20  gap-5">
+            <div className="wrapper rounded-lg mb-8">
                 <div className="flex items-center justify-between mb-8">
                 
                 <SectionHeader 
@@ -139,19 +147,20 @@ export default function TextsPage(){
                     icon={PenLine} 
                     description=""
                 />
-                <Button variant="outline" asChild size={"lg"}  className="">
-                    <Link href={"/upload"} about={"Upload"}className="font-bold bg-secondary hover:bg-primary hover:text-white">
+                <Button variant="outline" asChild size={"lg"}  className="h-12 w-35 font-bold text-lg">
+                    <Link href={"/upload"} about={"Upload"}className="font-bold text-base bg-secondary hover:bg-primary hover:text-white">
                         <Upload className="size-5"/>
                         <span className="hidden sm:flex">Upload</span>
                     </Link>
                 </Button>
                 </div>
                 <div className="grid-wrapper">
-                    {filtered.map((text) => 
+                    {paginated.map((text) => 
                         <TextCard key={text.id} text={text} />
                     )}
                 </div> 
             </div>
+                <PaginationControls page={page} totalPages={totalPages} onPageChange={setPage}/>
 
         </section>
         </div>

@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "../ui/command";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 interface Author {
   name: string
@@ -28,6 +29,7 @@ interface SearchBarProps {
 
 export function GlobalSearchBar({ searchList, onSearch, onItemSelect }: SearchBarProps) {
   const [inputValue, setInputValue] = useState('');
+  const router = useRouter();
 
   // Filtra só para o dropdown — não afeta os cards
   const suggestions = searchList.filter(item =>
@@ -50,9 +52,9 @@ export function GlobalSearchBar({ searchList, onSearch, onItemSelect }: SearchBa
               {suggestions.map(item => (
                 <CommandItem
                   key={item.id}
+                  value={`${item.id}-${item.title}`}
                   onSelect={() => {
-                    // router.push(`/textos/${item.id}`) — descomentar quando tiver a rota
-                    onItemSelect(item.id)
+                    router.push(`/textos/${item.id}`)
                   }}
                 >
                   {item.title}

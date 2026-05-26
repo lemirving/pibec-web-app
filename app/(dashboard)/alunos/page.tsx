@@ -33,7 +33,7 @@ export default function AlunosPage( ){
                         justify-center lg:py-24 py-12 text-center ">
                             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-6"> Alunos registrados</h1>
                             <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl leading-normal">
-                            Essa área co tém todos os alunos registrados em nosso banco de dados.
+                            Essa área contém todos os alunos registrados em nosso banco de dados.
                             </p>  
                         </div>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full ">
