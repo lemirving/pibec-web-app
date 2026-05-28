@@ -4,6 +4,7 @@ import { GlobalSearchBar } from "@/components/custom/global-search-bar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
+
 const list = [
   { id: 1, name: "Irving Lemuel",   grade: "4 ano", classroom: "B" },
   { id: 2, name: "Andrey Rogério",  grade: "4 ano", classroom: "C" },

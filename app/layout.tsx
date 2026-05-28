@@ -4,6 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/common/header";
 import Sidebar from "@/components/common/sidebar";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -23,22 +24,27 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={cn("h-full", "antialiased", dm_sans.className, "font-sans", inter.variable)}
-    >
-      <body className="min-h-screen flex flex-col bg-background">
-        <Header />
+    <ClerkProvider>
 
-        {/* Mudamos para flex-col no mobile e flex-row (lado a lado) no desktop (sm) */}
-        <div className="flex flex-col sm:flex-row flex-1">
-          <Sidebar /> 
+      <html
+        lang="en"
+        className={cn("h-full", "antialiased", dm_sans.className, "font-sans", inter.variable)}
+      >
+        <body className="min-h-screen flex flex-col bg-background">
+          <Header />
 
-          <main className="flex-1 p-4 sm:p-6">
-            {children}
-          </main>
-        </div>
-      </body>
-    </html>
+          {/* Mudamos para flex-col no mobile e flex-row (lado a lado) no desktop (sm) */}
+          <div className="flex flex-col sm:flex-row flex-1">
+            <Sidebar /> 
+
+            <main className="flex-1 p-4 sm:p-6">
+              {children}
+            </main>
+          </div>
+        </body>
+      
+      </html>
+    </ClerkProvider>
+    
   );
 }
