@@ -11,7 +11,7 @@ interface Author {
 }
 
 interface SearchItem {
-  id: number
+  id: string
   author: Author
   title: string
   theme: string
@@ -24,7 +24,7 @@ interface SearchItem {
 interface SearchBarProps {
   searchList: SearchItem[]
   onSearch: (value: string) => void
-  onItemSelect: (id: number) => void
+  onItemSelect: (id: string) => void
 }
 
 export function GlobalSearchBar({ searchList, onSearch, onItemSelect }: SearchBarProps) {
@@ -37,8 +37,9 @@ export function GlobalSearchBar({ searchList, onSearch, onItemSelect }: SearchBa
   )
 
   return (
-    <div className="flex gap-2 items-center justify-center">
-      <Command className="">
+    // Adicionamos 'relative' aqui para que o dropdown absoluto se alinhe por este container
+    <div className="relative flex gap-2 items-center justify-center w-full">
+      <Command className="overflow-visible"> 
         <CommandInput
           className="text-md"
           placeholder="Buscar produção..."
@@ -46,7 +47,9 @@ export function GlobalSearchBar({ searchList, onSearch, onItemSelect }: SearchBa
           onValueChange={setInputValue}
         />
         {inputValue && (
-          <CommandList>
+          // Tornamos a lista absoluta, jogamos ela um pouco para baixo (top-full), 
+          // damos um z-index alto (z-50) e estilizações de card flutuante (bg, border, shadow)
+          <CommandList className="absolute top-full left-0 right-0 mt-1 z-50 bg-popover text-popover-foreground border rounded-md shadow-md max-h-[300px] overflow-y-auto">
             <CommandEmpty>Nenhuma produção encontrada</CommandEmpty>
             <CommandGroup>
               {suggestions.map(item => (
@@ -56,6 +59,7 @@ export function GlobalSearchBar({ searchList, onSearch, onItemSelect }: SearchBa
                   onSelect={() => {
                     router.push(`/textos/${item.id}`)
                   }}
+                  className="cursor-pointer"
                 >
                   {item.title}
                 </CommandItem>
