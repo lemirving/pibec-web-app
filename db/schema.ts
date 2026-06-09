@@ -31,7 +31,7 @@ export const users = pgTable('users', {
 // 2. CLASSROOM (Turmas organizadas)
 export const classrooms = pgTable('classrooms', {
   id: uuid('id').defaultRandom().primaryKey(),
-  name: classroomNameEnum('name').notNull(), // ex: "9º Ano A"
+  name: classroomNameEnum('name').notNull(), 
   year: integer('year').notNull(), // ex: 2026
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
