@@ -4,6 +4,7 @@ import NotificationDropdown from "./notification-dropdown";
 import { ProfileDropdownMenu } from "./profile-dropdownmenu";
 import { Button } from "../ui/button";
 import { SignIn, SignUp, SignInButton, SignUpButton, Show, UserButton} from "@clerk/nextjs";
+import { Suspense } from "react";
 
 const Logo = () => {
     return (
@@ -28,21 +29,23 @@ export default function Header() {
                     <Logo />
                     <div className="flex gap-5">
                         <div className="flex items-center gap-5 ">
-                            <Show when="signed-out">
-                                <SignInButton>
-                                    <Button variant={"ghost"} className="text-base rounded-xl font-semibold  hover:text-black hover:bg-chart-4 hover:font-bold w-25"> Entrar </Button>
-                                </SignInButton>
-                                <SignUpButton>
-                                    <Button className="text-base rounded-sm font-semibold  hover:text-secondary hover:font-bold w-30"> Criar conta</Button>
-                                </SignUpButton>
-                            </Show>
-                            <Show when="signed-in">
-                                <Button asChild className="font-bold text-base  rounded-xs ">
-                                    <Link href={"/upload"}> <Upload className="size-4"/>Publicar</Link>
-                                </Button>
-                                <NotificationDropdown />
-                                <UserButton />
-                            </Show>
+                            <Suspense fallback={<div>Loading...</div>}>
+                                <Show when="signed-out">
+                                    <SignInButton>
+                                        <Button variant={"ghost"} className="text-base rounded-xl font-semibold  hover:text-black hover:bg-chart-4 hover:font-bold w-25"> Entrar </Button>
+                                    </SignInButton>
+                                    <SignUpButton>
+                                        <Button className="text-base rounded-sm font-semibold  hover:text-secondary hover:font-bold w-30"> Criar conta</Button>
+                                    </SignUpButton>
+                                </Show>
+                                <Show when="signed-in">
+                                    <Button asChild className="font-bold text-base  rounded-xs ">
+                                        <Link href={"/upload"}> <Upload className="size-4"/>Publicar</Link>
+                                    </Button>
+                                    <NotificationDropdown />
+                                    <UserButton />
+                                </Show>
+                            </Suspense>
                         </div>
                        < div className="flex gap-2">
                        </div>
