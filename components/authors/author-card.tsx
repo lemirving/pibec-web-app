@@ -1,12 +1,14 @@
 import { Eye } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
+import Link from "next/link";
 
 
 interface TextAuthor {
-  name:      string
-  grade:     string
-  classroom: string
+  id:        string; // 1. O ID agora está mapeado
+  name:      string;
+  grade:     string;
+  classroom: string | null;
 }
 
 export default function AuthorCard({ author }: { author: TextAuthor }) {
@@ -20,12 +22,14 @@ export default function AuthorCard({ author }: { author: TextAuthor }) {
         </div>
         <div>
           <p className="font-medium text-base">{author.name}</p>
-          <p className="text-sm text-muted-foreground">{author.grade} — Turma {author.classroom}</p>
+          <p className="text-sm text-muted-foreground">{author.grade} — Turma {author.classroom ?? "Não atribuída"}</p>
         </div>
       </div>
       <Button variant="outline" size="sm" className="gap-2">
-        <Eye size={16} />
-        Visualizar
+        <Link href={`/alunos/${author.id}`} className="gap-3 flex items-center">
+        <Eye size={16}/>
+        Visualisar
+        </Link>
       </Button>
     </Card>
   )
