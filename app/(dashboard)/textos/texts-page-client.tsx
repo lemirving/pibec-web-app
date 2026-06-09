@@ -57,19 +57,11 @@ export default function TextsPageClient({initialTexts}: Props){
     return (
         <div className="flex w-full flex-col p-4 sm:p-8 space-y-6 bg-background">           
             {/* 1. CORREÇÃO: Removemos o 'overflow-hidden' desta section */}
-            <section className="relative bg-linear-to-b from-background via-background to-muted/20">
+           {/* <section className="relative bg-linear-to-b from-background via-background to-muted/20"> */}
                 <div className="wrapper">
-                    <div className="flex flex-col items-center justify-center lg:py-24 py-12 text-center">
-                        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-6">Produções Escritas</h1>
-                        <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl leading-normal">
-                            Analise as produções do nosso acervo completo.
-                        </p>   
-                    </div>
-                    
-                    {/* 2. CORREÇÃO: Adicionamos 'relative z-30' e aumentamos o margin-bottom (mb-24) para dar espaço ao dropdown respirar */}
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full relative z-30 mb-24">
                         <div className="w-full h-full max-w-2xl items-center justify-center">
-                            <h2 className="text-lg mb-2 font-bold">Busque um texto qualquer.</h2>
+                            <h2 className="text-lg mb-2 font-bold text-center">Busque um texto qualquer.</h2>
                             <GlobalSearchBar 
                                 searchList={searchList}
                                 onSearch={handleSearchSubmit} 
@@ -78,7 +70,7 @@ export default function TextsPageClient({initialTexts}: Props){
                         </div> 
                     </div>
                 </div>
-            </section>
+            {/* </section> */}
 
             <Separator />
 
