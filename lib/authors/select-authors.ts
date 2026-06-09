@@ -4,7 +4,7 @@ import { eq , desc} from "drizzle-orm";
 
 
 export async function getAllAuthors() {
-  return await db
+  return await db 
     .select({
       id: authors.id,
       name: authors.name,

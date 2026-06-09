@@ -15,7 +15,7 @@ export default function TextsPage() {
     <div className="flex w-full flex-col p-4 sm:p-8 space-y-6 bg-background">           
       
       {/* 1. CABEÇALHO ESTÁTICO (Fora do Suspense, carrega em 0ms) */}
-      {/* <section className="relative bg-linear-to-b from-background via-background to-muted/20"> */}
+      <section className="relative bg-linear-to-b from-background via-background to-muted/20">
           <div className="wrapper">
               <div className="flex flex-col items-center justify-center lg:py-24 py-12 text-center">
                   <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-6">Produções Escritas</h1>
@@ -24,7 +24,7 @@ export default function TextsPage() {
                   </p>   
               </div>
           </div>
-      {/* </section> */}
+      </section>
 
       {/* <Separator /> */}
 
