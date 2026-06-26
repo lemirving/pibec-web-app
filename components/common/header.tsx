@@ -40,7 +40,7 @@ export default function Header() {
                                 </Show>
                                 <Show when="signed-in">
                                     <Button asChild className="font-bold text-base  rounded-xs ">
-                                        <Link href={"/upload"}> <Upload className="size-4"/>Publicar</Link>
+                                        <Link href={"/submeter"}> <Upload className="size-4"/>Publicar</Link>
                                     </Button>
                                     <NotificationDropdown />
                                     <UserButton />

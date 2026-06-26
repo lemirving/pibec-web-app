@@ -14,7 +14,7 @@ export function FileThumbnail({ extension }: { extension?: string | null }) {
 
   return (
     <div className={`w-full h-full rounded-md border ${config.bg} ${config.border} flex flex-col items-center justify-center gap-2`}>
-      {/* ícone de documento */}
+
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
         strokeWidth="1.5" className={config.text}>
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
