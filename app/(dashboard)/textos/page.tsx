@@ -14,7 +14,6 @@ export default function TextsPage() {
   return (
     <div className="flex w-full flex-col p-4 sm:p-8 space-y-6 bg-background">           
       
-      {/* 1. CABEÇALHO ESTÁTICO (Fora do Suspense, carrega em 0ms) */}
       <section className="relative bg-linear-to-b from-background via-background to-muted/20">
           <div className="wrapper">
               <div className="flex flex-col items-center justify-center lg:py-24 py-12 text-center">
@@ -26,9 +25,8 @@ export default function TextsPage() {
           </div>
       </section>
 
-      {/* <Separator /> */}
-
-      {/* 2. ÁREA DINÂMICA (Aguardando o Neon) */}
+  
+  
       <Suspense 
         fallback={
           <section className="py-10 bg-muted/20 gap-5 relative z-10">

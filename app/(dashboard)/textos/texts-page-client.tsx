@@ -34,7 +34,7 @@ export default function TextsPageClient({initialTexts}: Props){
     const searchList = initialTexts.map(t => ({
         id: t.id,
         author: { name: t.authorName ?? "", grade: t.authorGrade ?? "", classroom: "" },
-        title: t.title,   // ← direto do banco, sem gambiarra
+        title: t.title,   
         theme: t.genre,
         status: t.status,
         genre: t.genre,
@@ -56,8 +56,6 @@ export default function TextsPageClient({initialTexts}: Props){
 
     return (
         <div className="flex w-full flex-col p-4 sm:p-8 space-y-6 bg-background">           
-            {/* 1. CORREÇÃO: Removemos o 'overflow-hidden' desta section */}
-           {/* <section className="relative bg-linear-to-b from-background via-background to-muted/20"> */}
                 <div className="wrapper">
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-3 w-full relative z-30 mb-24">
                         <div className="w-full h-full max-w-2xl items-center justify-center">
