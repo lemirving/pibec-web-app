@@ -9,7 +9,6 @@ export async function getAllAuthors() {
       id: authors.id,
       name: authors.name,
       classroom: classrooms.name,
-      educationLevel: authors.educationLevel,
       grade: authors.grade,
       createdAt: authors.createdAt,
     })
