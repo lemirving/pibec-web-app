@@ -3,12 +3,16 @@ import { SubmitForm } from "@/components/submit/submit-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Upload } from "lucide-react";
 import { Separator } from "radix-ui";
+import { getAllClassrooms } from "@/lib/classrooms/get-classrooms";
+import ClassroomLoader from "@/components/classrooms/classroom-loader";
+import { Suspense } from "react";
 
 
-function submitNewText () {
 
-}
+
+
 export default function Submit() {
+
     return (
         <div className="px-20">
             <section className="relative bg-linear-to-b from-background via-background to-muted/20">
@@ -23,7 +27,9 @@ export default function Submit() {
             </section>
              
             <section className="w-full items-center justify-center">
-                    <SubmitForm />
+                <Suspense>
+                   <ClassroomLoader />   
+                </Suspense>
             </section>
         </div>
     );
