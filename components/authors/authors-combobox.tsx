@@ -19,7 +19,7 @@ import { gradeEnum, type Grade } from "@/db/schema";
 type Author = {
   id: string;
   name: string;
-  grade: string;
+  grade: Grade;
 };
 
 type Classroom = {
@@ -28,9 +28,9 @@ type Classroom = {
 };
 
 interface AuthorComboboxProps {
-  value: string; // authorId selecionado
+  value: string; 
   onChange: (authorId: string) => void;
-  classrooms: Classroom[]; // passado pelo componente pai
+  classrooms: Classroom[];
 }
 
 const gradeLabels: Record<Grade, string> = {
@@ -84,40 +84,43 @@ export function AuthorCombobox({ value, onChange, classrooms }: AuthorComboboxPr
     onChange("");
   }
 
+  
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       {selectedAuthor ? (
-        <div className="flex items-center justify-between rounded-md border px-3 py-2">
+        /* Card de selecionado aumentado para text-base e h-12 equivalente */
+        <div className="flex h-12 items-center justify-between rounded-md border px-3 text-base">
           <div className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-600" />
-            <span className="text-sm">
-              {selectedAuthor.name} — {selectedAuthor.grade}
+            <Check className="h-5 w-5 text-green-600" />
+            <span className="text-base font-medium">
+              {selectedAuthor.name} ({gradeLabels[selectedAuthor.grade]})
             </span>
           </div>
-          <Button type="button" variant="ghost" size="sm" onClick={handleClear}>
+          <Button type="button" variant="ghost" size="sm" className="text-base" onClick={handleClear}>
             Trocar
           </Button>
         </div>
       ) : (
-        <div className="relative flex gap-2">
+        <div className="relative flex gap-3 w-full">
           <div className="relative flex-1">
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar aluno por nome..."
               autoComplete="off"
+              className="h-12 text-base" /* Aumentado */
             />
 
             {query && (
               <ul className="absolute z-10 mt-1 w-full rounded-md border bg-background shadow-md max-h-60 overflow-auto">
                 {loading && (
-                  <li className="px-3 py-2 text-sm text-muted-foreground">
+                  <li className="px-3 py-3 text-base text-muted-foreground">
                     Buscando...
                   </li>
                 )}
 
                 {!loading && results.length === 0 && (
-                  <li className="px-3 py-2 text-sm text-muted-foreground">
+                  <li className="px-3 py-3 text-base text-muted-foreground">
                     Nenhum aluno encontrado.
                   </li>
                 )}
@@ -127,23 +130,25 @@ export function AuthorCombobox({ value, onChange, classrooms }: AuthorComboboxPr
                     <li
                       key={author.id}
                       onClick={() => handleSelect(author)}
-                      className="px-3 py-2 text-sm hover:bg-muted cursor-pointer"
+                      className="px-3 py-3 text-base hover:bg-muted cursor-pointer" /* Aumentado padding e texto */
                     >
-                      {author.name} — {author.grade}
+                      {author.name} ({gradeLabels[author.grade]})
                     </li>
                   ))}
               </ul>
             )}
           </div>
 
+          {/* O BOTÃO AUMENTADO AQUI */}
           <Button
             type="button"
             variant="outline"
-            size="icon"
             onClick={() => setDialogOpen(true)}
             title="Adicionar novo aluno"
+            className="h-12 px-4 text-base flex gap-2 font-medium shrink-0" 
           >
-            <UserPlus className="h-4 w-4" />
+            <UserPlus className="h-5 w-5" /> 
+            <span>Novo Aluno</span>
           </Button>
         </div>
       )}
@@ -161,7 +166,6 @@ export function AuthorCombobox({ value, onChange, classrooms }: AuthorComboboxPr
   );
 }
 
-// ---- Mini formulário pra criar novo aluno ----
 
 function NewAuthorDialog({
   open,
@@ -177,64 +181,59 @@ function NewAuthorDialog({
   const [name, setName] = React.useState("");
   const [grade, setGrade] = React.useState<Grade | "">("");
   const [classroomId, setClassroomId] = React.useState("");
-  const [educationLevel, setEducationLevel] = React.useState("");
   const [submitting, setSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
+  // Removido o educationLevel daqui já que ele foi retirado dos campos visíveis abaixo
   async function handleCreate() {
-    if (!name || !grade || !classroomId || !educationLevel) {
-      setError("Preencha todos os campos.");
-      return;
-    }
-
-    setSubmitting(true);
-    setError(null);
-
-    try {
-      const newAuthor = await createAuthor({
-        name,
-        grade,
-        classroomId,
-        educationLevel,
-      });
-
-      onCreated(newAuthor);
-      setName("");
-      setGrade("");
-      setClassroomId("");
-      setEducationLevel("");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro desconhecido");
-    } finally {
-      setSubmitting(false);
-    }
+  if (!name || !grade || !classroomId) {
+    setError("Preencha todos os campos.");
+    return;
   }
+
+  setSubmitting(true);
+  setError(null);
+
+  try {
+    const newAuthor = await createAuthor({ name, grade, classroomId });
+
+    onCreated(newAuthor);
+    setName("");
+    setGrade("");
+    setClassroomId("");
+  } catch (err) {
+    setError(err instanceof Error ? err.message : "Erro desconhecido");
+  } finally {
+    setSubmitting(false);
+  }
+}
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="sm:max-w-106.25">
         <DialogHeader>
-          <DialogTitle>Adicionar novo aluno</DialogTitle>
+          <DialogTitle className="text-xl font-bold">Adicionar novo aluno</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-3">
-          <div>
-            <Label htmlFor="new-author-name">Nome</Label>
+        <div className="space-y-5 py-2">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="new-author-name" className="text-base font-semibold">Nome</Label>
             <Input
               id="new-author-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Nome completo do aluno"
+              className="h-12 text-base"
             />
           </div>
 
-          <div>
-            <Label htmlFor="new-author-grade">Série</Label>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="new-author-grade" className="text-base font-semibold">Série</Label>
             <select
               id="new-author-grade"
               value={grade}
               onChange={(e) => setGrade(e.target.value as Grade)}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <option value="" disabled>
                 Selecione a série
@@ -247,13 +246,13 @@ function NewAuthorDialog({
             </select>
           </div>
 
-          <div>
-            <Label htmlFor="new-author-classroom">Turma</Label>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="new-author-classroom" className="text-base font-semibold">Turma</Label>
             <select
               id="new-author-classroom"
               value={classroomId}
               onChange={(e) => setClassroomId(e.target.value)}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="flex h-12 w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <option value="" disabled>
                 Selecione a turma
@@ -266,30 +265,14 @@ function NewAuthorDialog({
             </select>
           </div>
 
-          <div>
-            <Label htmlFor="new-author-education-level">Nível de ensino</Label>
-            <select
-              id="new-author-education-level"
-              value={educationLevel}
-              onChange={(e) => setEducationLevel(e.target.value)}
-              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-            >
-              <option value="" disabled>
-                Selecione o nível
-              </option>
-              <option value="fundamental">Fundamental</option>
-              <option value="medio">Médio</option>
-            </select>
-          </div>
-
-          {error && <p className="text-sm text-destructive">{error}</p>}
+          {error && <p className="text-sm text-destructive font-medium">{error}</p>}
         </div>
 
-        <DialogFooter>
-          <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+        <DialogFooter className="gap-2 sm:gap-0">
+          <Button type="button" variant="outline" className="h-11 text-base px-4" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
-          <Button type="button" onClick={handleCreate} disabled={submitting}>
+          <Button type="button" onClick={handleCreate} disabled={submitting} className="h-11 text-base px-4 font-bold">
             {submitting ? "Criando..." : "Criar aluno"}
           </Button>
         </DialogFooter>
