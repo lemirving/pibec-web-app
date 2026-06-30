@@ -38,7 +38,6 @@ export const authors = pgTable('authors', {
   classroomId: uuid('classroom_id')
     .references(() => classrooms.id, { onDelete: 'cascade' })
     .notNull(),
-  educationLevel: varchar('education_level', { length: 100 }).notNull(),
   grade: gradeEnum('grade').notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
 });
