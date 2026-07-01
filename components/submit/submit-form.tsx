@@ -31,6 +31,9 @@ import {
 } from "@/components/ui/input-group"
 import { getFeaturedTexts } from "@/lib/texts/select-texts"
 import { AuthorCombobox } from "../authors/authors-combobox"
+import { FileAttachments, PendingFile } from "./file-attachments"
+import { uploadFiles } from "@/lib/r2/upload-files"
+import { createText } from "@/lib/texts/create-text"
 
 
 const textStatusEnum = ['pendente', 'em_revisao', 'corrigido'];
@@ -75,18 +78,39 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
       authorId: undefined
     },
   })
+  const [attachments, setAttachments] = React.useState<PendingFile[]>([]);
+  const [submitting, setSubmitting] = React.useState(false);
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
-    toast("Elementos submetidos:", {
-      description: (
-        <pre className="mt-2 w-full overflow-x-auto rounded-md bg-code p-4 text-code-foreground text-sm">
-          <code>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-      position: "bottom-right",
-    })
+  async function onSubmit(data: z.infer<typeof formSchema>) {
+      console.log("onSubmit chamado", data); 
+    if (attachments.length === 0) {
+      toast.error("Anexe pelo menos um arquivo.");
+      return;
+    }
+
+    setSubmitting(true);
+
+    try {
+      console.log("2. iniciando upload dos arquivos...");
+      const uploaded = await uploadFiles(attachments);
+      console.log("3. upload concluído", uploaded);
+
+      console.log("4. salvando no banco...");
+      await createText({ ...data, attachments: uploaded });
+      console.log("5. banco salvo com sucesso");
+
+      toast.success("Texto submetido com sucesso!");
+      form.reset();
+      setAttachments([]);
+    } catch (err) {
+      console.error("ERRO:", err);
+      toast.error(
+        err instanceof Error ? err.message : "Erro ao submeter o texto."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
-
   return (
     // Removido o 'sm:max-w-md' para que o form possa crescer livremente na largura
     <Card className="w-full">
@@ -236,6 +260,13 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
                 </Field>
               )}
             />
+            {/*Files */}
+            <Field>
+              <FieldLabel className="text-lg font-semibold">
+                Arquivos do texto
+              </FieldLabel>
+              <FileAttachments files={attachments} onChange={setAttachments} />
+            </Field>
           </FieldGroup>
         </form>
       </CardContent>
