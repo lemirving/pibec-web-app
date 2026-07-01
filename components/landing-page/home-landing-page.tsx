@@ -38,7 +38,7 @@ export default function HomeLandingPage(){
                             <Link href={"/textos"} className="text-white"> <LibraryBig className="size-5"/>Ver Acervo</Link>
                         </Button>
                         <Button asChild size={"lg"} className="text-base font-bold px-9 shadow-lg bg-chart-2">
-                            <Link href={"/publicar"} className="text-white">  Publicar <PenSquare className="size-5"/></Link>
+                            <Link href={"/submeter"} className="text-white">  Submeter <PenSquare className="size-5"/></Link>
                         </Button>
                     </div>
                     <div className="grid  grid-cols-1 sm:grid-cols-3 gap-8 

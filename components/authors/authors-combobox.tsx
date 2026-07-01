@@ -268,7 +268,7 @@ function NewAuthorDialog({
           {error && <p className="text-sm text-destructive font-medium">{error}</p>}
         </div>
 
-        <DialogFooter className="gap-2 sm:gap-0">
+        <DialogFooter className="gap-2 sm:gap-4">
           <Button type="button" variant="outline" className="h-11 text-base px-4" onClick={() => onOpenChange(false)}>
             Cancelar
           </Button>
