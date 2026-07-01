@@ -34,6 +34,7 @@ import { AuthorCombobox } from "../authors/authors-combobox"
 import { FileAttachments, PendingFile } from "./file-attachments"
 import { uploadFiles } from "@/lib/r2/upload-files"
 import { createText } from "@/lib/texts/create-text"
+import { Loader2 } from "lucide-react"
 
 
 const textStatusEnum = ['pendente', 'em_revisao', 'corrigido'];
@@ -80,6 +81,7 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
   })
   const [attachments, setAttachments] = React.useState<PendingFile[]>([]);
   const [submitting, setSubmitting] = React.useState(false);
+  const [resetKey, setResetKey] = React.useState(0);
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
       console.log("onSubmit chamado", data); 
@@ -91,17 +93,20 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
     setSubmitting(true);
 
     try {
-      console.log("2. iniciando upload dos arquivos...");
       const uploaded = await uploadFiles(attachments);
-      console.log("3. upload concluído", uploaded);
 
-      console.log("4. salvando no banco...");
       await createText({ ...data, attachments: uploaded });
-      console.log("5. banco salvo com sucesso");
 
-      toast.success("Texto submetido com sucesso!");
+      toast.success("Texto submetido com sucesso!", {
+        position: "top-center",
+        style: {
+          background: "green",
+          color: "white",
+        },
+      });
       form.reset();
       setAttachments([]);
+      setResetKey((k) => k + 1); 
     } catch (err) {
       console.error("ERRO:", err);
       toast.error(
@@ -111,10 +116,27 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
       setSubmitting(false);
     }
   }
+
+    function onReset() {
+
+        setSubmitting(false);
+
+        try {
+          form.reset();
+          setAttachments([]);
+          setResetKey((k) => k + 1); 
+        } catch (err) {
+          console.error("ERRO:", err);
+          toast.error(
+            err instanceof Error ? err.message : "Erro ao resetar forms."
+          );
+        } finally {
+          setSubmitting(false);
+        }
+    }
   return (
-    // Removido o 'sm:max-w-md' para que o form possa crescer livremente na largura
-    <Card className="w-full">
-      <CardHeader className="space-y-2">
+    <Card className="w-full max-w-280">
+      <CardHeader className="space-y-4">
         <CardTitle className="text-2xl font-bold">Uploads</CardTitle>
         <CardDescription className="text-lg">
           Preencha o formulário com os dados do texto e seus arquivos.
@@ -122,7 +144,7 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
       </CardHeader>
       <CardContent>
         <form id="form-rhf-demo" onSubmit={form.handleSubmit(onSubmit)}>
-          <FieldGroup className="gap-6">
+          <FieldGroup className="gap-8">
             
             {/* Aluno */}
             <Controller
@@ -132,6 +154,7 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
                 <Field data-invalid={fieldState.invalid} className="gap-2">
                   <FieldLabel className="text-lg font-semibold">Aluno (autor do texto)</FieldLabel>
                   <AuthorCombobox
+                    key={resetKey}
                     value={field.value}
                     onChange={field.onChange}
                     classrooms={classrooms}
@@ -156,7 +179,7 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
                     aria-invalid={fieldState.invalid}
                     placeholder="Ex: Minha vida na Pandemia..."
                     autoComplete="off"
-                    className="h-12 text-base" /* Aumentado aqui */
+                    className="h-12 text-base" 
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
@@ -178,7 +201,7 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
                     aria-invalid={fieldState.invalid}
                     placeholder="Ex: Saúde"
                     autoComplete="off"
-                    className="h-12 text-base" /* Aumentado aqui */
+                    className="h-12 text-base" 
                   />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
@@ -247,7 +270,7 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
                       id="form-description"
                       placeholder="O texto se trata de um relato dos alunos sobre sua vida..."
                       rows={5}
-                      className="min-h-28 resize-none text-base" /* Aumentada a fonte e altura inicial */
+                      className="min-h-28 resize-none text-base" 
                       aria-invalid={fieldState.invalid}
                     />
                     <InputGroupAddon align="block-end">
@@ -272,11 +295,18 @@ export function SubmitForm({ classrooms }: SubmitFormProps) {
       </CardContent>
       <CardFooter>
         <Field orientation="horizontal" className="w-full justify-end gap-4">
-          <Button type="button" variant="outline" className="h-11 px-5 text-base" onClick={() => form.reset()}>
+          <Button type="button" variant="outline" className="h-11 px-5 text-base hover:bg-red-500 hover:text-white" onClick={onReset}>
             Apagar tudo
           </Button>
-          <Button type="submit" form="form-rhf-demo" className="h-11 px-5 text-base">
-            Submeter
+          <Button type="submit" form="form-rhf-demo" className="h-11 px-5 text-base hover:" disabled={submitting}>
+            {submitting ? (
+              <>
+                <Loader2 className="h-5 w-5 animate-spin" />
+                <span>Enviando...</span>
+              </>
+              )  
+              : ("Submeter")
+            }
           </Button>
         </Field>
       </CardFooter>
