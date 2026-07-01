@@ -26,8 +26,8 @@ export default function Submit() {
                 </div>
             </section>
              
-            <section className="w-full items-center justify-center">
-                <Suspense>
+            <section className="w-full flex justify-center px-4 py-8">
+                    <Suspense>
                    <ClassroomLoader />   
                 </Suspense>
             </section>
